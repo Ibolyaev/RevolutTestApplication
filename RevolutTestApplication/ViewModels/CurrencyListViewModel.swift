@@ -9,76 +9,86 @@
 import Foundation
 
 class CurrencyListViewModel {
-    var list: [[CurrencyRate]]
+    var list: [CurrencyRateViewModel]
     private var listResult: CurrenciesList? {
         didSet {
-            guard let listResult = listResult, listResult.base == baseCurrencyRate.currency else {
+            guard let listResult = listResult, listResult.base == base.currency else {
                 return
             }
             list.removeAll()
-            list.append([CurrencyRate(currency: listResult.base, rate: baseCurrencyRate.rate)])
-            list.append(listResult.rates.map({CurrencyRate(currency: $0.currency, rate: $0.rate * baseCurrencyRate.rate) }))
-            delegate?.finishFetchingData()
+            let currencyRateViewModelList: [CurrencyRateViewModel] = listResult.rates.map {
+                let newRate = CurrencyRate(currency: $0.currency, rate: $0.rate * base.rate)
+                return CurrencyRateViewModel(currencyRate: newRate)
+            }
+            list.append(CurrencyRateViewModel(currencyRate: base))
+            list += currencyRateViewModelList
+            
+            // Prepate undexes for update, we need to send message about updating all rows but base one
+            var indexes = list.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+            indexes.remove(at: 0) // we dont want to update base item
+            
+            delegate?.updateData(at: indexes)
         }
     }
     var updateInterval: TimeInterval = 2
-    private var timer: Timer
+    private lazy var timer: Timer = {
+        let timer = Timer(timeInterval: updateInterval)
+        timer.eventHandler = {
+            self.updateData()
+        }
+        return timer
+    }()
     var dataProvider: CurrencyListDataProvider
-    var baseCurrencyRate: CurrencyRate {
+    var base: CurrencyRate {
         didSet {
-            let index = list[1].firstIndex { (rate) -> Bool in
-                rate.currency == baseCurrencyRate.currency
+            let index = list.firstIndex {
+                $0.currencyRate.currency == base.currency
             }
-            guard let currencyIndex = index else {
+            guard let currencyIndex = index, currencyIndex != 0 else {
                 return
             }
-            list[1].remove(at: currencyIndex)
-            list[1].insert(list[0][0], at: 0)
-            list[0][0] = baseCurrencyRate
+            list.remove(at: currencyIndex)
+            list.insert(list[0], at: 0)
+            list[0] = CurrencyRateViewModel(currencyRate: base)
+            delegate?.moveItem(from: IndexPath(row: currencyIndex, section: 0), to: IndexPath(row: 0, section: 0))
         }
     }
     
     weak var delegate: CurrencyListViewModelDelegate?
     
     init(dataProvider: CurrencyListDataProvider) {
-        var baseCurrency: Currency
-        let locale = Locale.current
-        // Ideally we need to add some function which would compare currencies that we are currently support and user's current locale currency
-        // and if we dont support it yet, just return some default value
-        if let currencyCode = locale.currencyCode {
-            baseCurrency = currencyCode
-        } else {
-            baseCurrency = Api.defaultBaseCurrency
-        }
-        baseCurrencyRate = CurrencyRate(currency: baseCurrency, rate: 1)
-        list = [[CurrencyRate]]()
-        list.append([baseCurrencyRate])
         self.dataProvider = dataProvider
-        self.timer = Timer(timeInterval: updateInterval)
-        timer.eventHandler = {
-            self.updateData()
-        }
-        timer.resume()
+        base = dataProvider.getDefaultCurrencyRate()
+        
+        // Create list model with base currency rate
+        list = [CurrencyRateViewModel]()
+        list.append(CurrencyRateViewModel(currencyRate: base))
     }
     deinit {
         timer.suspend()
     }
+    func didSelectRowAt(at indexPath: IndexPath) {
+        guard indexPath.row != 0 else {
+            return
+        }
+        let item = list[indexPath.row]
+        base = item.currencyRate
+    }
     func getCurrencyRateViewModelFor(index: IndexPath) -> CurrencyRateViewModel {
-        let result = CurrencyRateViewModel(currencyRate: list[index.section][index.row])
+        let result = list[index.row]
         result.currencyRateDidChange = self.currencyRateDidChange
         return result
     }
     func currencyRateDidChange(rateModel: CurrencyRateViewModel) {
-        print("New rate is: \(rateModel.currencyRate.rate)")
-        baseCurrencyRate.rate = Double(rateModel.currencyRate.rate)
-        updateList()
+        base.rate = Double(rateModel.currencyRate.rate)
     }
     func updateList() {
         updateData()
     }
     private func updateData() {
+        timer.resume()
         self.delegate?.startFetchingData()
-        dataProvider.getCurrencyList(for: baseCurrencyRate.currency) {[weak self] (list, error) in
+        dataProvider.getCurrencyList(for: base.currency) {[weak self] (list, error) in
             guard let listResult = list else {
                 // show error
                 return
@@ -89,5 +99,6 @@ class CurrencyListViewModel {
 }
 protocol CurrencyListViewModelDelegate: class {
     func startFetchingData()
-    func finishFetchingData()
+    func updateData(at indexPath: [IndexPath])
+    func moveItem(from oldPath: IndexPath, to newIndexPath: IndexPath)
 }

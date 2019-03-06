@@ -9,6 +9,7 @@
 import UIKit
 
 class CurrencyRateCell: UITableViewCell {
+    static var identifier = "CurrencyRateCell"
     @IBOutlet var currencyName: UILabel!
     @IBOutlet var currencyCodeLabel: UILabel!
     @IBOutlet var countryImageView: UIImageView!
@@ -31,14 +32,5 @@ class CurrencyRateCell: UITableViewCell {
             rateTextField.isUserInteractionEnabled = true
             rateTextField.becomeFirstResponder()
         }
-    }
-}
-extension CurrencyRateCell: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        //self.inTheMiddleOfEditing = true
-    }
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-        //self.inTheMiddleOfEditing = false
-       // self.updateBaseItem()
     }
 }

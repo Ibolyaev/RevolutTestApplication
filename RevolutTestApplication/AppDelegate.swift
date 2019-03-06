@@ -20,16 +20,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         let dataProvider = CurrencyListDataProvider(requestFactory: RequestFactory())
         let listViewModel = CurrencyListViewModel(dataProvider: dataProvider)
-        currencyListVC.listViewModel = listViewModel
+        currencyListVC.viewModel = listViewModel
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = currencyListVC
         self.window?.makeKeyAndVisible()
         
         return true
     }
-
-    
-
-
 }
 

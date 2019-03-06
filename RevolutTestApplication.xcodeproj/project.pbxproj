@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3D16778B78C766EB568D30A3 /* Pods_RevolutTestApplication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FD5AC896B25CEE033CF9185 /* Pods_RevolutTestApplication.framework */; };
+		845D45D6222FB9E300A7EFEB /* BindingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D45D5222FB9E300A7EFEB /* BindingBox.swift */; };
 		84F5B91E2227CC2600953338 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F5B91D2227CC2600953338 /* AppDelegate.swift */; };
 		84F5B9232227CC2600953338 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84F5B9212227CC2600953338 /* Main.storyboard */; };
 		84F5B9252227CC2900953338 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84F5B9242227CC2900953338 /* Assets.xcassets */; };
@@ -50,6 +51,7 @@
 		40A128654163D801F6056096 /* Pods-RevolutTestApplication.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RevolutTestApplication.release.xcconfig"; path = "Target Support Files/Pods-RevolutTestApplication/Pods-RevolutTestApplication.release.xcconfig"; sourceTree = "<group>"; };
 		587D60EDFA0664CC52FA0F3D /* Pods_RevolutTestApplicationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RevolutTestApplicationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FD5AC896B25CEE033CF9185 /* Pods_RevolutTestApplication.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RevolutTestApplication.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		845D45D5222FB9E300A7EFEB /* BindingBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingBox.swift; sourceTree = "<group>"; };
 		84F5B91A2227CC2600953338 /* RevolutTestApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RevolutTestApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84F5B91D2227CC2600953338 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84F5B9222227CC2600953338 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -119,6 +121,15 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
+		845D45D4222FB97F00A7EFEB /* CurrencyRateCell */ = {
+			isa = PBXGroup;
+			children = (
+				84F5B97922280EA000953338 /* CurrencyRateCell.swift */,
+				84F5B97A22280EA000953338 /* CurrencyRateCell.xib */,
+			);
+			path = CurrencyRateCell;
+			sourceTree = "<group>";
+		};
 		84B72D00222D675700DC829F /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -132,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				BD2894FF222C77DA00B8C19A /* Timer.swift */,
+				845D45D5222FB9E300A7EFEB /* BindingBox.swift */,
 			);
 			path = Utlities;
 			sourceTree = "<group>";
@@ -261,8 +273,7 @@
 		84F5B97822280E7A00953338 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				84F5B97922280EA000953338 /* CurrencyRateCell.swift */,
-				84F5B97A22280EA000953338 /* CurrencyRateCell.xib */,
+				845D45D4222FB97F00A7EFEB /* CurrencyRateCell */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -484,6 +495,7 @@
 				84F5B9442227D29100953338 /* AbstractErrorParser.swift in Sources */,
 				84F5B96F2227D32500953338 /* Configuration.swift in Sources */,
 				84F5B97B22280EA000953338 /* CurrencyRateCell.swift in Sources */,
+				845D45D6222FB9E300A7EFEB /* BindingBox.swift in Sources */,
 				84F5B97E2228161000953338 /* CurrencyListViewModel.swift in Sources */,
 				BD289502222C7F8400B8C19A /* CurrencyRateViewModel.swift in Sources */,
 				84F5B9772227E69F00953338 /* CurrencyListViewController.swift in Sources */,

@@ -10,71 +10,55 @@ import Foundation
 import UIKit
 
 class CurrencyListViewController: UIViewController {
-    // MARK: - Custom types
-    // MARK: - Identifiers
-    let cellIdentifier = "CurrencyRateCell"
-    // MARK: - Constants
+    
     // MARK: - IBOutlet
     @IBOutlet var tableView: UITableView!
-    // MARK: - Public properties
     
-    var listViewModel: CurrencyListViewModel!
+    // MARK: - Public properties
+    var viewModel: CurrencyListViewModel!
+   
     // MARK: - Private properties
     private var inTheMiddleOfEditing = false
-    // MARK: - Init
+    
     // MARK: - ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UINib(nibName: "CurrencyRateCell", bundle: nil), forCellReuseIdentifier: cellIdentifier)
-        
-        listViewModel.delegate = self
-        listViewModel.updateList()
+        setupTableView()
+        setupViewModel()
     }
     
     // MARK: - IBAction
     // MARK: - Public methods
-    func updateTableViewRows(at indexPath: IndexPath) {
-        tableView.beginUpdates()
-        tableView.moveRow(at: indexPath, to: IndexPath(row: 0, section: 0))
-        tableView.moveRow(at: IndexPath(row: 0, section: 0), to: IndexPath(row: 0, section: 1))
-        tableView.endUpdates()
-        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: true) // NOT working ?
-    }
-    /*func updateBaseItemRate(rate: String) {
-        listViewModel.rate = Double(rate) ?? 0
-    }*/
     
     // MARK: - Private methods
-    // MARK: - Navigation
+    private func setupViewModel() {
+        viewModel.delegate = self
+        viewModel.updateList()
+    }
+    private func setupTableView() {
+        tableView.register(UINib(nibName: CurrencyRateCell.identifier, bundle: nil), forCellReuseIdentifier: CurrencyRateCell.identifier)
+    }
 }
 extension CurrencyListViewController: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return listViewModel.list.count
-    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listViewModel.list[section].count
+        return viewModel.list.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CurrencyRateCell else {
-            assertionFailure("Failed to get cell CurrencyRateCell")
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CurrencyRateCell.identifier, for: indexPath) as? CurrencyRateCell else {
+            assertionFailure("Failed to get cell with identifier: \(CurrencyRateCell.identifier)")
             return UITableViewCell()
         }
-        cell.viewModel = listViewModel.getCurrencyRateViewModelFor(index: indexPath)
+        cell.viewModel = viewModel.getCurrencyRateViewModelFor(index: indexPath)
         cell.rateTextField.delegate = self
-        cell.rateTextField.isUserInteractionEnabled = (indexPath.section == 0)
+        cell.rateTextField.isUserInteractionEnabled = (indexPath.row == 0)
         return cell
     }
 }
 
 extension CurrencyListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section != 0 else {
-            return
-        }
-        let item = listViewModel.list[indexPath.section][indexPath.row]
-        listViewModel.baseCurrencyRate = item
-        updateTableViewRows(at: indexPath)
+        viewModel.didSelectRowAt(at: indexPath)
     }
 }
 
@@ -88,16 +72,20 @@ extension CurrencyListViewController: UITextFieldDelegate {
 }
 
 extension CurrencyListViewController: CurrencyListViewModelDelegate {
+    func moveItem(from oldPath: IndexPath, to newIndexPath: IndexPath) {
+        tableView.beginUpdates()
+        tableView.moveRow(at: oldPath, to: newIndexPath)
+        tableView.endUpdates()
+        tableView.scrollToRow(at: newIndexPath, at: UITableView.ScrollPosition.top, animated: true)
+    }
     func startFetchingData() {
         //listViewModel.updateList()
     }
-    
-    func finishFetchingData() {
+    func updateData(at: [IndexPath]) {
         if inTheMiddleOfEditing {
-            tableView.reloadSections(IndexSet(integer: 1), with: UITableView.RowAnimation.none)
+            tableView.reloadRows(at: at, with: UITableView.RowAnimation.none)
         } else {
             tableView.reloadData()
         }
-        
     }
 }

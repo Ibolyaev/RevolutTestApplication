@@ -13,6 +13,19 @@ class CurrencyListDataProvider {
     init(requestFactory: RequestFactory) {
         self.requestFactory = requestFactory
     }
+    func getDefaultCurrencyRate() -> CurrencyRate {
+        // Ideally we need to add some function which would compare currencies that we are currently support and user's current locale currency
+        // and if we dont support it yet, just return some default value
+        var baseCurrency: Currency
+        let locale = Locale.current
+        if let currencyCode = locale.currencyCode {
+            baseCurrency = currencyCode
+        } else {
+            baseCurrency = Api.defaultBaseCurrency
+        }
+        
+        return CurrencyRate(currency: baseCurrency, rate: 1) // Base rate need to config somehow, as well as base currency
+    }
     func getCurrencyList(for baseCurrency: Currency,  completionHandler: @escaping (CurrenciesList?, Error?)->()) {
         let request = requestFactory.makeCurrenciesListRequestFactory()
         request.getList(baseCurrency: baseCurrency) { (response) in
