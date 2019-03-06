@@ -1,0 +1,6 @@
+framework module Pods_RevolutTestApplicationTests {
+  umbrella header "Pods-RevolutTestApplicationTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
