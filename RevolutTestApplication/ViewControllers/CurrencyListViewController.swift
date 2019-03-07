@@ -27,8 +27,15 @@ class CurrencyListViewController: UIViewController {
         setupViewModel()
     }
     
-    // MARK: - IBAction
     // MARK: - Public methods
+    func showAlertView(with text: String, title: String = "") {
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: title, message: text, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .default) { (action: UIAlertAction) in
+            })
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
     
     // MARK: - Private methods
     private func setupViewModel() {
@@ -39,9 +46,10 @@ class CurrencyListViewController: UIViewController {
         tableView.register(UINib(nibName: CurrencyRateCell.identifier, bundle: nil), forCellReuseIdentifier: CurrencyRateCell.identifier)
     }
 }
+// MARK: - UITableViewDataSource
 extension CurrencyListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.list.count
+        return viewModel.ratesViewModel.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -55,13 +63,13 @@ extension CurrencyListViewController: UITableViewDataSource {
         return cell
     }
 }
-
+// MARK: - UITableViewDelegate
 extension CurrencyListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.didSelectRowAt(at: indexPath)
     }
 }
-
+// MARK: - UITextFieldDelegate
 extension CurrencyListViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.inTheMiddleOfEditing = true
@@ -70,22 +78,27 @@ extension CurrencyListViewController: UITextFieldDelegate {
         self.inTheMiddleOfEditing = false
     }
 }
-
+// MARK: - CurrencyListViewModelDelegate
 extension CurrencyListViewController: CurrencyListViewModelDelegate {
+    func showError(error: Error?) {
+        showAlertView(with: error?.localizedDescription ?? "Unkown error", title: "Problem")
+    }
     func moveItem(from oldPath: IndexPath, to newIndexPath: IndexPath) {
-        tableView.beginUpdates()
-        tableView.moveRow(at: oldPath, to: newIndexPath)
-        tableView.endUpdates()
-        tableView.scrollToRow(at: newIndexPath, at: UITableView.ScrollPosition.top, animated: true)
+        self.tableView.beginUpdates()
+        self.tableView.moveRow(at: oldPath, to: newIndexPath)
+        self.tableView.endUpdates()
+        self.tableView.scrollToRow(at: newIndexPath, at: UITableView.ScrollPosition.top, animated: true)
     }
     func startFetchingData() {
-        //listViewModel.updateList()
+        // We could show activiti indicator, but data updates every second so dont need any
     }
     func updateData(at: [IndexPath]) {
-        if inTheMiddleOfEditing {
-            tableView.reloadRows(at: at, with: UITableView.RowAnimation.none)
-        } else {
-            tableView.reloadData()
+        DispatchQueue.main.async {
+            if self.inTheMiddleOfEditing {
+                self.tableView.reloadRows(at: at, with: UITableView.RowAnimation.none)
+            } else {
+                self.tableView.reloadData()
+            }
         }
     }
 }

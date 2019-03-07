@@ -11,20 +11,25 @@ import Foundation
 class CurrencyRateViewModel {
     var currencyRate: CurrencyRate {
         didSet {
-           self.currencyRateDidChange?(self)
+            rateText = BindingBox(formatter.string(from: NSNumber(value: currencyRate.rate)) ?? "")
         }
     }
-    let formatter = NumberFormatter()
-    var rateText: String {
-        get {
-            formatter.roundingMode = .halfDown
-            formatter.minimumIntegerDigits = 1
-            formatter.maximumFractionDigits = 2 // we can change it for more digits
-            return formatter.string(from: NSNumber(value: currencyRate.rate)) ?? ""
-        }
-    }
-    var currencyRateDidChange: ((CurrencyRateViewModel) -> ())?
-    init(currencyRate: CurrencyRate) {
+    let baseCurrencyRate: Double
+    let formatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.roundingMode = .halfDown
+        formatter.minimumIntegerDigits  = 1
+        formatter.maximumFractionDigits = 2 // we can change it for more digits
+        return formatter
+    }()
+    
+    let currency: BindingBox<Currency>
+    var rateText: BindingBox<String>
+    var currencyRateDidChange: ((Double) -> ())?
+    init(currencyRate: CurrencyRate, baseCurrencyRate: Double) {
         self.currencyRate = currencyRate
+        self.baseCurrencyRate = baseCurrencyRate
+        self.currency = BindingBox(currencyRate.currency)
+        rateText = BindingBox(formatter.string(from: NSNumber(value: currencyRate.rate)) ?? "")
     }
 }

@@ -13,14 +13,21 @@ class CurrencyRateCell: UITableViewCell {
     @IBOutlet var currencyName: UILabel!
     @IBOutlet var currencyCodeLabel: UILabel!
     @IBOutlet var countryImageView: UIImageView!
-    @IBOutlet var rateTextField: UITextField!    
-    @IBAction func rateEditingChanged(_ sender: UITextField) {
-        viewModel?.currencyRate.rate = Double(sender.text ?? "") ?? 0
+    @IBOutlet var rateTextField: BindingTextField!  {
+        didSet {
+            rateTextField.bind {
+                self.viewModel?.currencyRateDidChange?(Double($0) ?? 0)
+            }
+        }
     }
     var viewModel: CurrencyRateViewModel? {
         didSet {
-            rateTextField?.text = viewModel?.rateText
-            currencyCodeLabel?.text = viewModel?.currencyRate.currency
+            viewModel?.currency.bind(listener: { [unowned self] in
+                self.currencyCodeLabel?.text = $0
+            })
+            viewModel?.rateText.bind(listener: { [unowned self] in
+                self.rateTextField.text = $0
+            })
         }
     }
     override func awakeFromNib() {

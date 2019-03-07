@@ -19,14 +19,11 @@
                 <rect key="frame" x="0.0" y="0.0" width="494" height="69.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mEr-fi-rps">
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mEr-fi-rps" customClass="BindingTextField" customModule="RevolutTestApplication" customModuleProvider="target">
                         <rect key="frame" x="132" y="24.5" width="342" height="21"/>
                         <nil key="textColor"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <textInputTraits key="textInputTraits" textContentType="tel"/>
-                        <connections>
-                            <action selector="rateEditingChanged:" destination="KGk-i7-Jjw" eventType="editingChanged" id="cHO-wL-sLf"/>
-                        </connections>
                     </textField>
                     <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="bXL-OP-izZ">
                         <rect key="frame" x="20" y="20" width="33" height="16"/>
