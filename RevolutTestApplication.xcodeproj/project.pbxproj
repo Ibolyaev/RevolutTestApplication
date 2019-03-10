@@ -11,6 +11,7 @@
 		845D45D6222FB9E300A7EFEB /* BindingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D45D5222FB9E300A7EFEB /* BindingBox.swift */; };
 		845D45D8222FD43C00A7EFEB /* BindingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D45D7222FD43C00A7EFEB /* BindingTextField.swift */; };
 		845D45DA2230632C00A7EFEB /* CurrencyListViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D45D92230632C00A7EFEB /* CurrencyListViewModelProtocol.swift */; };
+		845D45DC2231297500A7EFEB /* CurrencyListViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D45DB2231297500A7EFEB /* CurrencyListViewModelDelegate.swift */; };
 		84F5B91E2227CC2600953338 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F5B91D2227CC2600953338 /* AppDelegate.swift */; };
 		84F5B9232227CC2600953338 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84F5B9212227CC2600953338 /* Main.storyboard */; };
 		84F5B9252227CC2900953338 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84F5B9242227CC2900953338 /* Assets.xcassets */; };
@@ -56,6 +57,7 @@
 		845D45D5222FB9E300A7EFEB /* BindingBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingBox.swift; sourceTree = "<group>"; };
 		845D45D7222FD43C00A7EFEB /* BindingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingTextField.swift; sourceTree = "<group>"; };
 		845D45D92230632C00A7EFEB /* CurrencyListViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyListViewModelProtocol.swift; sourceTree = "<group>"; };
+		845D45DB2231297500A7EFEB /* CurrencyListViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyListViewModelDelegate.swift; sourceTree = "<group>"; };
 		84F5B91A2227CC2600953338 /* RevolutTestApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RevolutTestApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84F5B91D2227CC2600953338 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84F5B9222227CC2600953338 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			children = (
 				845D45D92230632C00A7EFEB /* CurrencyListViewModelProtocol.swift */,
 				84F5B97D2228161000953338 /* CurrencyListViewModel.swift */,
+				845D45DB2231297500A7EFEB /* CurrencyListViewModelDelegate.swift */,
 				BD289501222C7F8400B8C19A /* CurrencyRateViewModel.swift */,
 			);
 			path = ViewModels;
@@ -504,6 +507,7 @@
 				845D45D6222FB9E300A7EFEB /* BindingBox.swift in Sources */,
 				84F5B97E2228161000953338 /* CurrencyListViewModel.swift in Sources */,
 				BD289502222C7F8400B8C19A /* CurrencyRateViewModel.swift in Sources */,
+				845D45DC2231297500A7EFEB /* CurrencyListViewModelDelegate.swift in Sources */,
 				84F5B9772227E69F00953338 /* CurrencyListViewController.swift in Sources */,
 				84F5B98022296B7D00953338 /* CurrencyListDataProvider.swift in Sources */,
 				84F5B9722227D39800953338 /* Constants.swift in Sources */,

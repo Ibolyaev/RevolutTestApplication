@@ -22,7 +22,9 @@ class CurrencyRateViewModel {
         formatter.maximumFractionDigits = 2 // we can change it for more digits
         return formatter
     }()
-    
+    var currencyImageName: String {        
+        return currency.value
+    }
     let currency: BindingBox<Currency>
     var rateText: BindingBox<String>
     var currencyRateDidChange: ((Double) -> ())?

@@ -28,11 +28,14 @@ class CurrencyRateCell: UITableViewCell {
             viewModel?.rateText.bind(listener: { [unowned self] in
                 self.rateTextField.text = $0
             })
+            countryImageView?.image = UIImage(named: viewModel?.currencyImageName ?? "")
         }
     }
     override func awakeFromNib() {
         self.selectionStyle = .none
         self.rateTextField.textAlignment = .right
+        countryImageView.clipsToBounds = true
+        countryImageView.layer.cornerRadius = countryImageView.frame.width / 2
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
         if selected {
