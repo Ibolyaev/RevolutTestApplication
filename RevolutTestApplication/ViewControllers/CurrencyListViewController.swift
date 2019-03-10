@@ -77,25 +77,36 @@ extension CurrencyListViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
         self.inTheMiddleOfEditing = false
     }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
+
 // MARK: - CurrencyListViewModelDelegate
 extension CurrencyListViewController: CurrencyListViewModelDelegate {
     func showError(error: Error?) {
         showAlertView(with: error?.localizedDescription ?? "Unkown error", title: "Problem")
     }
     func moveItem(from oldPath: IndexPath, to newIndexPath: IndexPath) {
-        self.tableView.beginUpdates()
-        self.tableView.moveRow(at: oldPath, to: newIndexPath)
-        self.tableView.endUpdates()
-        self.tableView.scrollToRow(at: newIndexPath, at: UITableView.ScrollPosition.top, animated: true)
+        tableView.performBatchUpdates({
+            self.tableView.moveRow(at: oldPath, to: newIndexPath)
+        }) { (success) in
+            self.tableView.cellForRow(at: newIndexPath)?.setSelected(true, animated: false)
+            self.tableView.scrollToRow(at: newIndexPath, at: .top, animated: true)
+        }
     }
     func startFetchingData() {
-        // We could show activiti indicator, but data updates every second so dont need any
+        // We could show activity indicator, but data updates every second so dont need any
+        //print("startFetchingData")
     }
     func updateData(at: [IndexPath]) {
         DispatchQueue.main.async {
             if self.inTheMiddleOfEditing {
-                self.tableView.reloadRows(at: at, with: UITableView.RowAnimation.none)
+                self.tableView.reloadData()
+                let newCell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CurrencyRateCell
+                newCell?.setSelected(true, animated: false)
+                //newCell?.rateTextField.becomeFirstResponder()
             } else {
                 self.tableView.reloadData()
             }

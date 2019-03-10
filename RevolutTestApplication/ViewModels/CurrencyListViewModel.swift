@@ -24,17 +24,28 @@ class CurrencyListViewModel {
             updateIndexes()
         }
     }
-    var updateInterval: TimeInterval = 3
+    var updateInterval: TimeInterval = 1
     weak var delegate: CurrencyListViewModelDelegate?
     
     // MARK: - Private properties
     private var rates = [CurrencyRate]() {
         didSet {
-            ratesViewModel = rates.map {
-                CurrencyRateViewModel(currencyRate: $0, baseCurrencyRate: $0.rate)
+            if ratesViewModel.isEmpty {
+                ratesViewModel = rates.map {
+                    CurrencyRateViewModel(currencyRate: $0, baseCurrencyRate: $0.rate)
+                }
+            } else {
+                ratesViewModel.forEach { (viewModel) in
+                    guard let newRate = rates.first(where: { (rate) -> Bool in
+                        viewModel.currencyRate.currency == rate.currency
+                    }) else {
+                        return
+                    }
+                    viewModel.baseCurrencyRate = newRate.rate
+                }
             }
-            calculateRates()
             updateBaseCurrency()
+            calculateRates()
             updateIndexes()
         }
     }
@@ -80,13 +91,16 @@ class CurrencyListViewModel {
     // MARK: - Private methods
     private func calculateRates() {
         ratesViewModel.forEach {
-            guard $0.currencyRate.currency != base else {
-                return
+            if $0.currencyRate.currency == base {
+                $0.currencyRate.rate = rate
             }
             $0.currencyRate.rate = $0.baseCurrencyRate * rate
         }
     }
     private func updateBaseCurrency() {
+        guard !ratesViewModel.isEmpty else {
+            return
+        }
         let currencyRate = CurrencyRate(currency: base, rate: rate)
         let index = ratesViewModel.firstIndex { $0.currencyRate == currencyRate }
         if let currencyIndex = index {

@@ -14,7 +14,7 @@ class CurrencyRateViewModel {
             rateText = BindingBox(formatter.string(from: NSNumber(value: currencyRate.rate)) ?? "")
         }
     }
-    let baseCurrencyRate: Double
+    var baseCurrencyRate: Double
     let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.roundingMode = .halfDown

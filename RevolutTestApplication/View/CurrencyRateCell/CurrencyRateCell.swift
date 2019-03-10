@@ -12,7 +12,7 @@ class CurrencyRateCell: UITableViewCell {
     static var identifier = "CurrencyRateCell"
     @IBOutlet var currencyCodeLabel: UILabel!
     @IBOutlet var countryImageView: UIImageView!
-    @IBOutlet var rateTextField: BindingTextField!  {
+    @IBOutlet var rateTextField: BindingTextField! {
         didSet {
             rateTextField.bind {
                 self.viewModel?.currencyRateDidChange?(Double($0) ?? 0)
@@ -21,18 +21,20 @@ class CurrencyRateCell: UITableViewCell {
     }
     var viewModel: CurrencyRateViewModel? {
         didSet {
-            viewModel?.currency.bind(listener: { [unowned self] in
+            self.viewModel?.currency.bind(listener: { [unowned self] in
                 self.currencyCodeLabel?.text = $0
             })
-            viewModel?.rateText.bind(listener: { [unowned self] in
+            self.viewModel?.rateText.bind(listener: { [unowned self] in
                 self.rateTextField.text = $0
             })
-            countryImageView?.image = UIImage(named: viewModel?.currencyImageName.lowercased() ?? "")
+            self.countryImageView?.image = UIImage(named: self.viewModel?.currencyImageName.lowercased() ?? "")
         }
     }
     override func awakeFromNib() {
         self.selectionStyle = .none
         self.rateTextField.textAlignment = .right
+    }
+    override func layoutSubviews() {
         countryImageView.clipsToBounds = true
         countryImageView.layer.cornerRadius = countryImageView.frame.width / 2
     }
