@@ -27,19 +27,12 @@
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="oOC-E4-gPy">
                         <rect key="frame" x="20" y="11" width="48" height="48"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="48" id="f4w-0E-5SJ"/>
                             <constraint firstAttribute="width" secondItem="oOC-E4-gPy" secondAttribute="height" multiplier="1:1" id="qa1-cF-GYC"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YqY-jZ-p8j">
-                        <rect key="frame" x="76" y="11" width="48" height="24"/>
+                        <rect key="frame" x="76" y="11" width="48" height="47.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zYX-Az-Gfp">
-                        <rect key="frame" x="76" y="43" width="33" height="16"/>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -48,24 +41,21 @@
                     <constraint firstItem="oOC-E4-gPy" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="0II-Ms-h8e"/>
                     <constraint firstItem="oOC-E4-gPy" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="3fV-Pk-Piv"/>
                     <constraint firstItem="mEr-fi-rps" firstAttribute="leading" secondItem="YqY-jZ-p8j" secondAttribute="trailing" constant="8" symbolic="YES" id="7LD-2D-nD5"/>
+                    <constraint firstItem="YqY-jZ-p8j" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Iir-rS-5Ut"/>
                     <constraint firstItem="mEr-fi-rps" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="K0i-Bx-wub"/>
                     <constraint firstItem="YqY-jZ-p8j" firstAttribute="leading" secondItem="oOC-E4-gPy" secondAttribute="trailing" constant="8" symbolic="YES" id="KKV-9t-prl"/>
                     <constraint firstItem="YqY-jZ-p8j" firstAttribute="top" secondItem="oOC-E4-gPy" secondAttribute="top" id="RzM-l5-7Yp"/>
-                    <constraint firstItem="zYX-Az-Gfp" firstAttribute="top" secondItem="YqY-jZ-p8j" secondAttribute="bottom" constant="8" symbolic="YES" id="cdt-nb-8sX"/>
                     <constraint firstItem="mEr-fi-rps" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="dGU-76-3Bb"/>
                     <constraint firstItem="oOC-E4-gPy" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="lKd-HP-EHM"/>
-                    <constraint firstItem="zYX-Az-Gfp" firstAttribute="leading" secondItem="oOC-E4-gPy" secondAttribute="trailing" constant="8" symbolic="YES" id="uT4-3J-r2K"/>
-                    <constraint firstItem="zYX-Az-Gfp" firstAttribute="bottom" secondItem="oOC-E4-gPy" secondAttribute="bottom" id="ypI-E5-4N2"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="countryImageView" destination="oOC-E4-gPy" id="Emd-AJ-FwS"/>
                 <outlet property="currencyCodeLabel" destination="YqY-jZ-p8j" id="F0L-uA-Ol1"/>
-                <outlet property="currencyName" destination="zYX-Az-Gfp" id="8KR-r8-PSZ"/>
                 <outlet property="rateTextField" destination="mEr-fi-rps" id="cxq-YU-TRl"/>
             </connections>
-            <point key="canvasLocation" x="-155" y="12"/>
+            <point key="canvasLocation" x="-155.19999999999999" y="11.694152923538232"/>
         </tableViewCell>
     </objects>
 </document>

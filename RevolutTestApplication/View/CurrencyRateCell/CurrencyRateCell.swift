@@ -10,7 +10,6 @@ import UIKit
 
 class CurrencyRateCell: UITableViewCell {
     static var identifier = "CurrencyRateCell"
-    @IBOutlet var currencyName: UILabel!
     @IBOutlet var currencyCodeLabel: UILabel!
     @IBOutlet var countryImageView: UIImageView!
     @IBOutlet var rateTextField: BindingTextField!  {
@@ -28,7 +27,7 @@ class CurrencyRateCell: UITableViewCell {
             viewModel?.rateText.bind(listener: { [unowned self] in
                 self.rateTextField.text = $0
             })
-            countryImageView?.image = UIImage(named: viewModel?.currencyImageName ?? "")
+            countryImageView?.image = UIImage(named: viewModel?.currencyImageName.lowercased() ?? "")
         }
     }
     override func awakeFromNib() {
