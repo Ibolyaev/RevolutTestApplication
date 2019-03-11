@@ -41,7 +41,7 @@ class CurrencyRateCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         if selected {
             rateTextField.isUserInteractionEnabled = true
-            rateTextField.becomeFirstResponder()
+            //rateTextField.becomeFirstResponder()
         }
     }
 }

@@ -10,6 +10,6 @@ import Foundation
 protocol CurrencyListViewModelDelegate: class {
     func showError(error: Error?)
     func startFetchingData()
-    func updateData(at indexPath: [IndexPath])
+    func updateData()
     func moveItem(from oldPath: IndexPath, to newIndexPath: IndexPath)
 }

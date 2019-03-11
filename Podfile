@@ -12,6 +12,7 @@ target 'RevolutTestApplication' do
     inherit! :search_paths
     # Pods for testing
     pod 'Alamofire'
+    pod 'OHHTTPStubs/Swift'
   end
 
 end

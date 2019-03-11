@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard let currencyListVC = viewController else {
             fatalError("Failed to load CurrencyListViewController")
         }
-        let dataProvider = CurrencyListDataProvider(requestFactory: RequestFactory())
+        let dataProvider = CurrencyListDataProviderDefault(requestFactory: RequestFactory())
         let listViewModel = CurrencyListViewModel(dataProvider: dataProvider)
         currencyListVC.viewModel = listViewModel
         self.window = UIWindow(frame: UIScreen.main.bounds)

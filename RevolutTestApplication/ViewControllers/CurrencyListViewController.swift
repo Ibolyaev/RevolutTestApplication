@@ -89,24 +89,20 @@ extension CurrencyListViewController: CurrencyListViewModelDelegate {
         showAlertView(with: error?.localizedDescription ?? "Unkown error", title: "Problem")
     }
     func moveItem(from oldPath: IndexPath, to newIndexPath: IndexPath) {
-        tableView.performBatchUpdates({
-            self.tableView.moveRow(at: oldPath, to: newIndexPath)
-        }) { (success) in
-            self.tableView.cellForRow(at: newIndexPath)?.setSelected(true, animated: false)
-            self.tableView.scrollToRow(at: newIndexPath, at: .top, animated: true)
-        }
+        self.tableView.moveRow(at: oldPath, to: newIndexPath)
+        let cell = self.tableView.cellForRow(at: newIndexPath) as? CurrencyRateCell
+        self.tableView.scrollToRow(at: newIndexPath, at: .top, animated: true)
+        cell?.rateTextField.becomeFirstResponder()
     }
     func startFetchingData() {
         // We could show activity indicator, but data updates every second so dont need any
-        //print("startFetchingData")
     }
-    func updateData(at: [IndexPath]) {
+    func updateData() {
         DispatchQueue.main.async {
             if self.inTheMiddleOfEditing {
                 self.tableView.reloadData()
                 let newCell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CurrencyRateCell
-                newCell?.setSelected(true, animated: false)
-                //newCell?.rateTextField.becomeFirstResponder()
+                newCell?.rateTextField.becomeFirstResponder()
             } else {
                 self.tableView.reloadData()
             }

@@ -109,10 +109,7 @@ class CurrencyListViewModel {
         ratesViewModel.insert(CurrencyRateViewModel(currencyRate: currencyRate, baseCurrencyRate: 1), at: 0)
     }
     private func updateIndexes() {
-        // Prepare indexes for an update, we need to send message about updating all items
-        var indexes = ratesViewModel.enumerated().map { IndexPath(row: $0.offset, section: 0) }
-        indexes.remove(at: 0) // we dont want to update base item
-        delegate?.updateData(at: indexes)
+        delegate?.updateData()
     }
     private func updateData() {        
         self.delegate?.startFetchingData()
