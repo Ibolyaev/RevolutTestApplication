@@ -1,7 +1,5 @@
 import Alamofire
 
-// Класс базовой фабрики, прочие классы сущностей наследуются от него
-
 class BasicFactory: AbstractRequestFactory {
     
     let errorParser: AbstractErrorParser

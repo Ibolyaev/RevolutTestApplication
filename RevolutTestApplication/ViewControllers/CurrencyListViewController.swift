@@ -19,6 +19,12 @@ class CurrencyListViewController: UIViewController {
    
     // MARK: - Private properties
     private var inTheMiddleOfEditing = false
+    private var isAnimatingScroll = false
+    private var selectedCell: CurrencyRateCell? {
+        didSet {
+            makeSelectedCellFirstResponder()
+        }
+    }
     
     // MARK: - ViewController lifecycle
     override func viewDidLoad() {
@@ -38,6 +44,27 @@ class CurrencyListViewController: UIViewController {
     }
     
     // MARK: - Private methods
+    private func makeSelectedCellFirstResponder() {
+        guard let selectedCell = self.selectedCell else {
+            return
+        }
+        // If current tableView.contentOffset is (0.0) then cell on current screen and no need to wait until it become at top screen
+        // then we could simply call becomeFirstResponder on textField
+        if tableView?.contentOffset == CGPoint.zero {
+            selectedCell.rateTextField.becomeFirstResponder()
+            self.selectedCell = nil
+        }
+    }
+    private func showData() {
+        guard !isAnimatingScroll else {
+            return
+        }
+        tableView.reloadData()
+    }
+    func scrollToRow(indexPath: IndexPath) {
+        isAnimatingScroll = (tableView.contentOffset != CGPoint.zero)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+    }
     private func setupViewModel() {
         viewModel.delegate = self
         viewModel.updateList()
@@ -65,8 +92,21 @@ extension CurrencyListViewController: UITableViewDataSource {
 }
 // MARK: - UITableViewDelegate
 extension CurrencyListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        // For correct tableview display, we need to stop updating table, because row selection may occurs rows scrolling
+        // which turns to lagging
+        self.isAnimatingScroll = true
+        return indexPath
+    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.didSelectRowAt(at: indexPath)
+    }
+}
+extension CurrencyListViewController: UIScrollViewDelegate {
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        isAnimatingScroll = false
+        // Now selected cell on top screen and we can call first responder on it
+        self.selectedCell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CurrencyRateCell
     }
 }
 // MARK: - UITextFieldDelegate
@@ -89,22 +129,24 @@ extension CurrencyListViewController: CurrencyListViewModelDelegate {
         showAlertView(with: error?.localizedDescription ?? "Unkown error", title: "Problem")
     }
     func moveItem(from oldPath: IndexPath, to newIndexPath: IndexPath) {
+        self.isAnimatingScroll = true
         self.tableView.moveRow(at: oldPath, to: newIndexPath)
-        let cell = self.tableView.cellForRow(at: newIndexPath) as? CurrencyRateCell
-        self.tableView.scrollToRow(at: newIndexPath, at: .top, animated: true)
-        cell?.rateTextField.becomeFirstResponder()
+        self.isAnimatingScroll = false
+        
+        self.selectedCell = self.tableView.cellForRow(at: newIndexPath) as? CurrencyRateCell
+        self.scrollToRow(indexPath: newIndexPath)
     }
     func startFetchingData() {
-        // We could show activity indicator, but data updates every second so dont need any
+        // We could show activity indicator, but data updates every second so don't need any.
     }
     func updateData() {
         DispatchQueue.main.async {
             if self.inTheMiddleOfEditing {
-                self.tableView.reloadData()
-                let newCell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CurrencyRateCell
-                newCell?.rateTextField.becomeFirstResponder()
+                self.showData()
+                self.selectedCell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CurrencyRateCell
             } else {
-                self.tableView.reloadData()
+                self.showData()
+                self.makeSelectedCellFirstResponder()
             }
         }
     }

@@ -21,7 +21,7 @@ class CurrencyListViewModel {
     var rate: Double = 1 {
         didSet {
             calculateRates()
-            updateIndexes()
+            delegate?.updateData()
         }
     }
     var updateInterval: TimeInterval = 1
@@ -46,7 +46,7 @@ class CurrencyListViewModel {
             }
             updateBaseCurrency()
             calculateRates()
-            updateIndexes()
+            delegate?.updateData()
         }
     }
     private lazy var timer: Timer = {
@@ -108,9 +108,6 @@ class CurrencyListViewModel {
         }
         ratesViewModel.insert(CurrencyRateViewModel(currencyRate: currencyRate, baseCurrencyRate: 1), at: 0)
     }
-    private func updateIndexes() {
-        delegate?.updateData()
-    }
     private func updateData() {        
         self.delegate?.startFetchingData()
         dataProvider.getCurrencyList(for: base) {[weak self] (list, error) in
@@ -118,7 +115,7 @@ class CurrencyListViewModel {
                 self?.delegate?.showError(error: error)
                 return
             }
-            // Make sure that base currency still the same
+            // Make sure that base currency is still the same
             guard self?.base == listResult.base else {
                 return
             }
