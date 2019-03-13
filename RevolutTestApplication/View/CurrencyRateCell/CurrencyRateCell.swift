@@ -19,7 +19,8 @@ class CurrencyRateCell: UITableViewCell {
                     self.viewModel?.currencyRateDidChange?(0)
                     return
                 }
-                guard let number = Double($0) else {
+                let numberString = $0.replacingOccurrences(of: ",", with: ".")
+                guard let number = Double(numberString) else {
                     return
                 }
                 self.viewModel?.currencyRateDidChange?(number)
