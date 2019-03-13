@@ -14,8 +14,15 @@ class CurrencyRateCell: UITableViewCell {
     @IBOutlet var countryImageView: UIImageView!
     @IBOutlet var rateTextField: BindingTextField! {
         didSet {
-            rateTextField.bind {
-                self.viewModel?.currencyRateDidChange?(Double($0) ?? 0)
+            rateTextField.bind {[unowned self] in
+                if self.rateTextField.text?.isEmpty ?? true {
+                    self.viewModel?.currencyRateDidChange?(0)
+                    return
+                }
+                guard let number = Double($0) else {
+                    return
+                }
+                self.viewModel?.currencyRateDidChange?(number)
             }
         }
     }
@@ -32,16 +39,16 @@ class CurrencyRateCell: UITableViewCell {
     }
     override func awakeFromNib() {
         self.selectionStyle = .none
-        self.rateTextField.textAlignment = .right
+        self.rateTextField.defaultTextAttributes = CurrencyTextFieldTextAttributes.defaultAttributes
     }
     override func layoutSubviews() {
         countryImageView.clipsToBounds = true
         countryImageView.layer.cornerRadius = countryImageView.frame.width / 2
+        countryImageView.layer.borderWidth = 0.5
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
         if selected {
             rateTextField.isUserInteractionEnabled = true
-            //rateTextField.becomeFirstResponder()
         }
     }
 }

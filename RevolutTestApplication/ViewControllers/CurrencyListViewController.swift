@@ -51,15 +51,21 @@ class CurrencyListViewController: UIViewController {
         // If current tableView.contentOffset is (0.0) then cell on current screen and no need to wait until it become at top screen
         // then we could simply call becomeFirstResponder on textField
         if tableView?.contentOffset == CGPoint.zero {
+            //selectedCell.setSelected(true, animated: false)
             selectedCell.rateTextField.becomeFirstResponder()
             self.selectedCell = nil
         }
     }
-    private func showData() {
+    private func showData(_ indexPath: [IndexPath]? = nil) {
         guard !isAnimatingScroll else {
             return
         }
-        tableView.reloadData()
+        if let indexPath = indexPath {
+            tableView.reloadRows(at: indexPath, with: UITableView.RowAnimation.none)
+        } else {
+           tableView.reloadData()
+        }
+        
     }
     func scrollToRow(indexPath: IndexPath) {
         isAnimatingScroll = (tableView.contentOffset != CGPoint.zero)
@@ -87,6 +93,7 @@ extension CurrencyListViewController: UITableViewDataSource {
         cell.viewModel = viewModel.getCurrencyRateViewModelFor(index: indexPath)
         cell.rateTextField.delegate = self
         cell.rateTextField.isUserInteractionEnabled = (indexPath.row == 0)
+        
         return cell
     }
 }
@@ -94,8 +101,7 @@ extension CurrencyListViewController: UITableViewDataSource {
 extension CurrencyListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         // For correct tableview display, we need to stop updating table, because row selection may occurs rows scrolling
-        // which turns to lagging
-        self.isAnimatingScroll = true
+        //self.isAnimatingScroll = true
         return indexPath
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -112,6 +118,7 @@ extension CurrencyListViewController: UIScrollViewDelegate {
 // MARK: - UITextFieldDelegate
 extension CurrencyListViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.defaultTextAttributes = CurrencyTextFieldTextAttributes.selectedAttributes
         self.inTheMiddleOfEditing = true
     }
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
@@ -142,8 +149,9 @@ extension CurrencyListViewController: CurrencyListViewModelDelegate {
     func updateData() {
         DispatchQueue.main.async {
             if self.inTheMiddleOfEditing {
-                self.showData()
-                self.selectedCell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CurrencyRateCell
+                // We are going to update only visible cells, exept first one, becouse it is editing now
+                let visibleCellsIndexPath = self.tableView.indexPathsForVisibleRows?.filter{ ($0.row != 0) }
+                self.showData(visibleCellsIndexPath)
             } else {
                 self.showData()
                 self.makeSelectedCellFirstResponder()
